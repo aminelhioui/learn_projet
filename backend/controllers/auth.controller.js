@@ -27,15 +27,15 @@ exports.register = async (req, res) => {
         error: [{ message: "Email already exists" }],
       });
     }
-    //role exist+normalisastion
+    // role existence + normalisation (ROLE stored uppercase)
     if (!roleTitre || typeof roleTitre !== "string") {
-        removeUploadimg(req.file);
+      removeUploadimg(req.file);
       return res.status(400).json({
         success: false,
         error: [{ message: "Role is required and must be a string" }],
       });
     }
-    const normRoleTitre = roleTitre.trim().toLowerCase();
+    const normRoleTitre = roleTitre.trim().toUpperCase();
     const roleValide = await Role.findOne({ titre: normRoleTitre });
     if (!roleValide) {
         removeUploadimg(req.file);
@@ -148,7 +148,7 @@ exports.logout = (req, res) => {
 exports.current = async (req, res) => {
   try {
     // req user?
-    const foundUser = await User.findById(req.user.id).populate("role");   
+    const foundUser = await User.findById(req.user.id).populate("roles");
     if (!foundUser) {
       return res.status(404).json({
         success: false,

@@ -4,7 +4,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 // middleware
 app.use(express.json());
-app.use("./uploads", express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 
 //connect to database

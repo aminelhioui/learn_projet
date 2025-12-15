@@ -12,8 +12,8 @@ router.get('/test', (req, res) => {
     res.send('auth route');
 });
 
-// register 
-router.post('/register',isAuth, hashRole("ADMIN") ,upload.single('profilePic'),registerValidation,validate, register ) ;
+// register (ouvert pour les nouveaux utilisateurs)
+router.post('/register', upload.single('profilePic'), registerValidation, validate, register);
 // Login
 router.post('/login' ,loginValidation, validate ,login ) ;
 // logout
