@@ -1,3 +1,7 @@
+// Configuration de multer pour gérer les uploads d'images
+// - Crée le dossier `uploads` si nécessaire
+// - Nomme les fichiers de façon unique
+// - Filtre les types MIME autorisés (jpeg/png)
 const fs = require('fs');
 const multer = require('multer');
 const path = require('path');

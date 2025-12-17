@@ -3,14 +3,18 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
+// Barre de navigation principale (composant présentiel)
+// Contient des liens statiques d'exemple; à adapter selon les routes de l'application
 function NaveBare() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
+        {/* Marque / logo */}
         <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
+            {/* Liens de navigation (exemples) */}
             <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#link">Link</Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">

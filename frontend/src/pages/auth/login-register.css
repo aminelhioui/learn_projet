@@ -1,0 +1,155 @@
+/* Professional styles for login & register forms */
+:root{
+    --bg: #0f1724;
+    --card: #0b1220;
+    --accent: #2563eb;
+    --muted: #9aa4b2;
+}
+
+body {
+    background: linear-gradient(180deg,#e6eefb 0%, #f8fafc 100%);
+}
+
+.formulaire{
+    max-width: 420px;
+    margin: 36px auto;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(10,20,40,0.08);
+    border: 1px solid rgba(11,17,34,0.04);
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.formulaire h2{
+    margin: 0 0 14px 0;
+    font-size: 1.25rem;
+    color: #0b1220;
+}
+
+.warning-card {
+    background: #fff4e6;
+    border-radius: 12px;
+    border: 1px solid rgba(249, 115, 22, 0.35);
+    padding: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    box-shadow: 0 12px 30px rgba(249, 115, 22, 0.18);
+}
+
+.warning-image {
+    width: 68px;
+    height: 68px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid rgba(249, 115, 22, 0.5);
+}
+
+.warning-text {
+    margin: 0;
+    color: #b45309;
+    font-weight: 600;
+}
+
+.formulaire .form-label {
+    font-weight: 600;
+    color: #10243a;
+}
+
+.formulaire .form-control {
+    border-radius: 8px;
+    border: 1px solid rgba(12,20,36,0.08);
+    padding: 10px 12px;
+}
+
+.formulaire .form-control:focus {
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+    border-color: var(--accent);
+}
+
+.formulaire .btn-primary {
+    background: linear-gradient(90deg,var(--accent),#7c3aed);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+}
+
+.formulaire .btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+.formulaire .text-muted {
+    color: var(--muted);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+}
+
+@media (max-width: 520px) {
+    .formulaire{
+        margin: 18px;
+        padding: 18px;
+    }
+}
+
+/* Enhanced styles for Create User form layout */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-section {
+    margin-bottom: 14px;
+}
+
+.formulaire h1 {
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+    color: #0b1220;
+}
+
+.avatar-upload {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-preview {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    background: linear-gradient(180deg,#fff,#f1f5f9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(12,20,36,0.06);
+    font-weight: 700;
+    color: #334155;
+}
+
+.form-control[type="file"] {
+    padding: 6px 8px;
+}
+
+.form-error {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+@media (max-width: 720px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+

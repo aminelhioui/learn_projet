@@ -1,3 +1,6 @@
+// Schéma Mongoose pour les rôles
+// - `titre` : identifiant du rôle (ex: ADMIN) en majuscules et unique
+// - `permissions` : tableau optionnel de chaînes décrivant les permissions
 const mongoose = require('mongoose');
 
 const roleSchema = new mongoose.Schema({

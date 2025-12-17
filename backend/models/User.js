@@ -1,3 +1,5 @@
+// Schéma Mongoose pour les utilisateurs
+// Champs importants : userName, email (unique), password (hashé), rôle (référence vers Role)
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({

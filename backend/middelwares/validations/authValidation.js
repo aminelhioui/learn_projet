@@ -1,3 +1,4 @@
+// Validations pour les routes d'authentification (register / login)
 const { body } = require("express-validator");
 exports.registerValidation = [
   body("userName")
