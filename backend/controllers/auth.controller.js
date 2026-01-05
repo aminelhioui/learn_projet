@@ -123,6 +123,13 @@ exports.login = async (req, res) => {
       sameSite: cookieSameSite,
       maxAge: 2 * 60 * 60 * 1000, // 2 hours
     });
+    // update lastLogin timestamp for statistics
+    try {
+      foundUser.lastLogin = new Date();
+      await foundUser.save();
+    } catch (e) {
+      console.error('Failed to update lastLogin:', e.message);
+    }
     // response
     const safeUser = foundUser.toObject();
     delete safeUser.password;

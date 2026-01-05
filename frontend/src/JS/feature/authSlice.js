@@ -59,7 +59,7 @@ const authSlice = createSlice( {
         msg: null,
         loading: false,
         success: null,
-        initializing: false,
+        initializing: true,
     },
     reducers: {
         // Réinitialise les erreurs stockées

@@ -1,0 +1,104 @@
+/* Professional toast styles */
+
+/* Ensure toasts appear above other content */
+.toast-container,
+.toast-container .toast-container {
+  z-index: 10800 !important;
+}
+
+/* Force the toast container to be fixed at the viewport top-right */
+.toast-container {
+  position: fixed !important;
+  top: 1rem !important;
+  right: 1rem !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+/* If bootstrap renders positional helpers (top-center etc), override to keep top-right */
+.toast-container.top-0.start-50.translate-middle-x,
+.toast-container.top-0.start-50,
+.toast-container.top-0.start-50.translate-middle-x > .toast,
+.toast-container.top-0.start-50 > .toast {
+  transform: none !important;
+  left: auto !important;
+  right: 1rem !important;
+}
+
+/* Base toast appearance */
+.toast.custom-toast {
+  min-width: 300px;
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(11, 22, 39, 0.12);
+  overflow: hidden;
+  border-left: 6px solid transparent;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Force each toast element to be fixed in the viewport top-right as a fallback
+   in case the container is constrained by a transformed parent. */
+.toast.custom-toast {
+  position: fixed !important;
+  top: 1rem !important;
+  right: 1rem !important;
+  left: auto !important;
+  margin: 0 0 0.5rem 0 !important;
+  z-index: 10900 !important;
+}
+
+/* Header tweaks to make it clean */
+.toast.custom-toast .toast-header {
+  background: transparent;
+  border-bottom: 0;
+  padding: 10px 14px 6px 14px;
+}
+
+.toast.custom-toast .toast-body {
+  padding: 10px 14px 12px 14px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+/* Success variant */
+.toast.custom-toast.bg-success {
+  color: #ffffff;
+  background: linear-gradient(180deg, #2ecc71 0%, #22c55e 100%);
+  border-left-color: #10b981;
+}
+
+/* Warning variant */
+.toast.custom-toast.bg-warning {
+  color: #212529;
+  background: linear-gradient(180deg, #fff3cd 0%, #ffe8a8 100%);
+  border-left-color: #ffc107;
+}
+
+/* Small image in header */
+.toast.custom-toast .toast-header img {
+  width: 22px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Close button styling */
+.toast.custom-toast .btn-close {
+  opacity: 0.8;
+  filter: none;
+}
+
+/* Slide-in animation from the right */
+@keyframes slideInRight {
+  from { transform: translateX(12px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.toast.custom-toast.show {
+  animation: slideInRight 220ms cubic-bezier(.2,.9,.2,1) both;
+}
+
+/* Responsive tweaks */
+@media (max-width: 420px) {
+  .toast.custom-toast { min-width: 260px; max-width: 92vw; }
+}

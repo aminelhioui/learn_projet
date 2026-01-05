@@ -1,10 +1,9 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './login-register.css'
-import { useState } from 'react';
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { showToast } from '../../JS/feature/toastSlice';
 import { useNavigate } from 'react-router-dom';
 import { Login as loginAction, Logout } from '../../JS/feature/authSlice';
 import { BACKEND_BASE_URL } from '../../api/axios';
@@ -12,10 +11,19 @@ import { BACKEND_BASE_URL } from '../../api/axios';
 // Image utilisée dans les messages d'avertissement
 const WARNING_IMAGE_URL = `${BACKEND_BASE_URL}/uploads/istockphoto-502381843-1024x1024.jpg`;
 
-// Composant page Login (interface d'authentification)
-const Login = () => {
+  // Composant page Login (interface d'authentification)
+  const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loading = useSelector((state) => state.auth.loading);
+  const user = useSelector((state) => state.auth.user);
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Si déjà connecté, rediriger vers le dashboard
+  useEffect(() => {
+    if (user) navigate('/admin/dashboard');
+  }, [user, navigate]);
 
   // Etat du formulaire
   const [userToConnect, setUserToConnect] = useState({
@@ -24,14 +32,32 @@ const Login = () => {
   });
   // Etat pour afficher un avertissement (ex: accès non-admin, erreur API)
   const [warning, setWarning] = useState(null);
-  // Contrôles d'affichage des toasts (messages popup)
-  const [showToast, setShowToast] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
+  // Contrôles d'affichage des toast notifications (gérés globalement)
 
   // Met à jour le state du formulaire lors de la saisie
   const handleChange = (e) => {
     setUserToConnect({ ...userToConnect, [e.target.name]: e.target.value });
+  };
+
+  // load remembered email once (after state is defined)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('rememberEmail');
+      if (saved) {
+        setUserToConnect((s) => ({ ...s, email: saved }));
+        setRememberMe(true);
+      }
+    } catch {}
+  }, []);
+
+  const togglePasswordLocal = () => setShowPassword((s) => !s);
+
+  const handleRememberLocal = (e) => {
+    const checked = e.target.checked;
+    setRememberMe(checked);
+    if (!checked) {
+      try { localStorage.removeItem('rememberEmail'); } catch {}
+    }
   };
 
   // Soumet le formulaire de connexion
@@ -48,20 +74,25 @@ const Login = () => {
 
       // Si l'utilisateur n'est pas ADMIN, on refuse l'accès ici
       if (user?.roles?.titre !== 'ADMIN') {
-        setWarning({
-          message:
-            'Accès réservé aux administrateurs. Les comptes classiques ne peuvent pas se connecter ici.',
-          image: WARNING_IMAGE_URL,
-        });
-        setShowToast(true);
-        // effectue un logout côté client pour être sûr
-        await dispatch(Logout());
+        const msg = 'Accès réservé aux administrateurs. Les comptes classiques ne peuvent pas se connecter ici.';
+        setWarning({ message: msg, image: WARNING_IMAGE_URL });
+        // Emit global toast so it survives navigation/unmount
+        dispatch(showToast({ message: msg, variant: 'warning', delay: 4500 }));
+        // Retarder le logout pour laisser le toast visible
+        setTimeout(() => {
+          dispatch(Logout());
+        }, 3500);
         return;
       }
 
       // Succès : afficher un message puis rediriger
-      setSuccessMsg('Connexion réussie — vous êtes redirigé.');
-      setShowSuccess(true);
+      const success = 'Connexion réussie — vous êtes redirigé.';
+      dispatch(showToast({ message: success, variant: 'success', delay: 1400 }));
+      // remember email if requested
+      try {
+        if (rememberMe) localStorage.setItem('rememberEmail', userToConnect.email);
+        else localStorage.removeItem('rememberEmail');
+      } catch {}
       // Réinitialise le formulaire avant navigation
       setUserToConnect({ email: '', password: '' });
       setTimeout(() => navigate('/admin/dashboard'), 900);
@@ -73,13 +104,14 @@ const Login = () => {
         ? err[0]?.message || fallback
         : err?.message || fallback;
       setWarning({ message, image: WARNING_IMAGE_URL });
-      setShowToast(true);
+      dispatch(showToast({ message, variant: 'warning', delay: 4500 }));
     }
   };
 
   return (
     <div className="formulaire">
       <h2>Login</h2>
+      <p style={{ textAlign: 'center', color: '#64748b', marginBottom: 16 }}>Connectez-vous pour accéder au tableau de bord administrateur</p>
 
       {/* Carte d'avertissement affichée si `warning` est défini */}
       {warning && (
@@ -89,7 +121,6 @@ const Login = () => {
             src={warning.image}
             alt="Attention"
             onError={(e) => {
-              // En cas d'erreur de chargement de l'image, remplacer par une image par défaut
               e.target.onerror = null;
               e.target.src = `${BACKEND_BASE_URL}/uploads/1765295184175-203176977.png`;
             }}
@@ -98,26 +129,7 @@ const Login = () => {
         </div>
       )}
 
-      {/* Toast pour les messages d'avertissement */}
-      <ToastContainer position="top-end" className="p-3">
-        <Toast onClose={() => setShowToast(false)} show={showToast} autohide delay={4500} bg="warning">
-          <Toast.Header>
-            <img src={warning?.image || WARNING_IMAGE_URL} className="rounded me-2" alt="img" style={{ width: 20, height: 20, objectFit: 'cover' }} onError={(e) => { e.target.onerror = null; e.target.src = `${BACKEND_BASE_URL}/uploads/1765295184175-203176977.png`; }} />
-            <strong className="me-auto">Accès refusé</strong>
-          </Toast.Header>
-          <Toast.Body>{warning?.message}</Toast.Body>
-        </Toast>
-      </ToastContainer>
-
-      {/* Toast pour les messages de succès */}
-      <ToastContainer position="top-center" className="p-3">
-        <Toast onClose={() => setShowSuccess(false)} show={showSuccess} autohide delay={1200} bg="success">
-          <Toast.Header>
-            <strong className="me-auto">Succès</strong>
-          </Toast.Header>
-          <Toast.Body className="text-white">{successMsg}</Toast.Body>
-        </Toast>
-      </ToastContainer>
+      
 
       {/* Formulaire de connexion */}
       <Form onSubmit={handleLogin}>
@@ -134,19 +146,36 @@ const Login = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            name="password"
-            onChange={handleChange}
-            value={userToConnect.password}
-            required
-          />
+          <div style={{ position: 'relative' }}>
+            <Form.Control
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              name="password"
+              onChange={handleChange}
+              value={userToConnect.password}
+              required
+              style={{ paddingRight: 46 }}
+            />
+            <button type="button" onClick={togglePasswordLocal} aria-label="toggle password" style={{ position: 'absolute', right: 8, top: 6, border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 18 }}>
+              {showPassword ? '🙈' : '👁️'}
+            </button>
+          </div>
         </Form.Group>
 
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <input id="rememberMe" type="checkbox" checked={rememberMe} onChange={handleRememberLocal} />
+            <label htmlFor="rememberMe" className="remember-label" style={{ margin: 0 }}>Remember me</label>
+          </div>
+          <a href="#" onClick={(e)=>{e.preventDefault(); dispatch(showToast({ message: 'Password reset flow not implemented', variant: 'info' }));}} style={{ color: '#64748b' }}>Forgot?</a>
+        </div>
+
         <div className="form-actions">
-          <Button variant="primary" type="submit">
-            Login
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading && (
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            )}
+            {loading ? 'Connecting...' : 'Login'}
           </Button>
         </div>
       </Form>

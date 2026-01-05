@@ -2,11 +2,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './login-register.css'
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { showToast } from '../../JS/feature/toastSlice';
 import { useNavigate } from 'react-router-dom';
 import { Register as registerAction } from '../../JS/feature/authSlice';
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
+// using global toast component mounted in App
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -23,10 +23,9 @@ const Register = () => {
   // Fichier choisi et aperçu local
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const loading = useSelector((state) => state.auth.loading);
   const [errors, setErrors] = useState(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
+  // success messages are handled by GlobalToast
 
   // Met à jour les champs du formulaire
   const handleChange = (e) => {
@@ -48,7 +47,6 @@ const Register = () => {
   // Soumet le formulaire : construit un FormData et appelle l'action Redux `registerAction`
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setErrors(null);
     try {
       const data = new FormData();
@@ -60,37 +58,27 @@ const Register = () => {
       if (file) data.append('profilePic', file);
 
       await dispatch(registerAction(data)).unwrap();
-      // Réinitialise le formulaire, affiche un toast de succès et redirige
+      // Réinitialise le formulaire, affiche une toast notification de succès et redirige
       setForm({ userName: '', email: '', password: '', phone: '', roleTitre: '' });
       setFile(null);
       setPreview(null);
-      setSuccessMsg('Utilisateur créé avec succès');
-      setShowSuccess(true);
+      const success = 'Utilisateur créé avec succès';
+      dispatch(showToast({ message: success, variant: 'success', delay: 1400 }));
       setTimeout(() => navigate('/admin/dashboard'), 900);
     } catch (err) {
       // Affiche les erreurs renvoyées par l'API (ou un message générique)
       setErrors(err || [{ message: 'Registration failed' }]);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="formulaire">
-      <h1>Create a new User</h1>
+      <h1>Créer un nouvel utilisateur</h1>
       {Array.isArray(errors) && errors.map((e, i) => (
         <div key={i} style={{ color: 'crimson', marginBottom: 8 }}>{e.message}</div>
       ))}
 
-      {/* Toast de succès */}
-      <ToastContainer position="top-center" className="p-3">
-        <Toast onClose={() => setShowSuccess(false)} show={showSuccess} autohide delay={1200} bg="success">
-          <Toast.Header>
-            <strong className="me-auto">Succès</strong>
-          </Toast.Header>
-          <Toast.Body className="text-white">{successMsg}</Toast.Body>
-        </Toast>
-      </ToastContainer>
+      {/* Global toast will display success message */}
 
       <Form onSubmit={handleSubmit} encType="multipart/form-data">
         <Form.Group className="mb-3">
@@ -152,7 +140,7 @@ const Register = () => {
         </Form.Group>
 
         <div className="form-actions">
-          <Button variant="primary" type="submit" disabled={loading}>{loading ? 'Creating...' : 'Submit'}</Button>
+          <Button variant="primary" type="submit" disabled={loading}>{loading ? 'Creating...' : 'Ajouter'}</Button>
         </div>
       </Form>
     </div>

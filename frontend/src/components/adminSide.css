@@ -1,93 +1,98 @@
-/* Professional admin sidebar styles */
+/* Styles modernes pour la barre latérale d'administration */
 .admin-sidebar {
-	width: 240px;
-	min-width: 200px;
-	background: linear-gradient(180deg, #0b1220 0%, #0f1724 100%);
-	color: #e6eef8;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	box-shadow: 2px 0 8px rgba(2,6,23,0.6);
-	position: sticky;
-	top: 0;
-	padding: 18px 14px;
-	font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  width: 260px;
+  background: #ffffff;
+  color: #1e293b;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  padding: 1.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar-top {
+  padding: 0 0.5rem 2rem 0.5rem;
 }
 
 .sidebar-top .brand {
-	font-weight: 700;
-	font-size: 1.05rem;
-	color: #fff;
-	letter-spacing: 0.4px;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #4f46e5;
+  letter-spacing: -0.025em;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .sidebar-nav {
-	margin-top: 18px;
-	flex: 1 1 auto;
+  flex: 1;
 }
 
 .admin-menu {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
-
-.admin-menu li {
-	width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .menu-link {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	padding: 10px 12px;
-	color: #c9d6e6;
-	text-decoration: none;
-	border-radius: 8px;
-	transition: background 160ms ease, color 160ms ease, transform 140ms ease;
-	font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #64748b;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 0.9375rem;
 }
 
 .menu-link:hover {
-	background: rgba(255,255,255,0.03);
-	color: #fff;
-	transform: translateX(4px);
+  background: #f1f5f9;
+  color: #1e293b;
+  transform: translateX(4px);
 }
 
 .menu-link.active {
-	background: linear-gradient(90deg, rgba(59,130,246,0.12), rgba(99,102,241,0.06));
-	color: #60a5fa;
-	box-shadow: inset 3px 0 0 0 rgba(96,165,250,0.12);
+  background: #eef2ff;
+  color: #4f46e5;
 }
 
 .sidebar-footer {
-	font-size: 12px;
-	color: #94a3b8;
-	padding-top: 12px;
-	border-top: 1px solid rgba(255,255,255,0.03);
+  padding: 1rem 0.5rem 0 0.5rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  border-top: 1px solid #f1f5f9;
 }
 
-/* Responsive: collapse to top bar on small screens */
+/* Responsive: adaptation pour les petits écrans */
 @media (max-width: 800px) {
-	.admin-sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-		display: block;
-		padding: 12px;
-	}
-	.admin-menu {
-		flex-direction: row;
-		gap: 8px;
-		overflow-x: auto;
-	}
-	.menu-link {
-		white-space: nowrap;
-		padding: 8px 10px;
-		border-radius: 6px;
-	}
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-top {
+    padding-bottom: 1rem;
+  }
+
+  .admin-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .menu-link {
+    white-space: nowrap;
+  }
 }

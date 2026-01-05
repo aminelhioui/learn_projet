@@ -60,6 +60,8 @@ connectDB().then(async () => {
 app.use('/api/auth', require("./routes/auth.route"));
 // Routes liées aux utilisateurs (liste, création, suppression...)
 app.use('/api/users', require("./routes/user.route"));
+// Routes des rôles (liste pour frontend)
+app.use('/api/roles', require("./routes/role.route"));
 
 
 // Démarrage du serveur

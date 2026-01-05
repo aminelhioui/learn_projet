@@ -31,6 +31,17 @@ const userSchema = new mongoose.Schema({
         ref: 'Role',
         required: true,
     },
+    // Date de dernière connexion et compteur d'actions effectuées
+    lastLogin: Date,
+    actionCount: {
+        type: Number,
+        default: 0,
+    },
+    // Historique léger des timestamps d'actions (utilisé pour calculer "actions cette semaine")
+    actionTimestamps: {
+        type: [Date],
+        default: [],
+    },
 }, 
 {timestamps: true, versionKey: false}
 );

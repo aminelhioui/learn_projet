@@ -21,22 +21,22 @@ const AdminSideBar = () => {
   return (
     <aside className="admin-sidebar">
       <div className="sidebar-top">
-        <div className="brand">MonProjet Admin</div>
+        <div className="brand">Tableau de bord</div>
       </div>
 
       <nav className="sidebar-nav" aria-label="Main navigation">
         <ul className="admin-menu">
           <li>
             {/* Lien vers le formulaire d'ajout d'utilisateur */}
-            <NavLink to="register" className={({ isActive }) => isActive ? 'menu-link active' : 'menu-link'}>Add User</NavLink>
+            <NavLink to="register" className={({ isActive }) => isActive ? 'menu-link active' : 'menu-link'}>Ajout d'un utilisateur</NavLink>
           </li>
           <li>
             {/* Lien vers la gestion des utilisateurs */}
-            <NavLink to="users" className={({ isActive }) => isActive ? 'menu-link active' : 'menu-link'}>Manage Users</NavLink>
+            <NavLink to="users" className={({ isActive }) => isActive ? 'menu-link active' : 'menu-link'}>Gérer les utilisateurs</NavLink>
           </li>
           <li>
             {/* Lien vers le dashboard ou paramètres */}
-            <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? 'menu-link active' : 'menu-link'}>Settings</NavLink>
+            <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? 'menu-link active' : 'menu-link'}>Profils de l'administrateur</NavLink>
           </li>
           <li>
             {/* Bouton de déconnexion */}

@@ -101,6 +101,18 @@ exports.createUser = async (req, res) => {
       .populate('roles')
       .select('-password');
 
+    // incrémente le compteur d'actions pour l'utilisateur qui effectue la création (si présent)
+    try {
+      if (req.user && req.user.id) {
+        await User.findByIdAndUpdate(req.user.id, {
+          $inc: { actionCount: 1 },
+          $push: { actionTimestamps: { $each: [new Date()], $slice: -100 } },
+        });
+      }
+    } catch (e) {
+      console.error('Failed to increment actionCount on create:', e.message);
+    }
+
     return res.status(201).json({
       success: true,
       message: 'User created',
@@ -172,6 +184,18 @@ exports.updateUser = async (req, res) => {
       .populate('roles')
       .select('-password');
 
+    // incrémente le compteur d'actions pour l'utilisateur qui effectue la modification (si présent)
+    try {
+      if (req.user && req.user.id) {
+        await User.findByIdAndUpdate(req.user.id, {
+          $inc: { actionCount: 1 },
+          $push: { actionTimestamps: { $each: [new Date()], $slice: -100 } },
+        });
+      }
+    } catch (e) {
+      console.error('Failed to increment actionCount on update:', e.message);
+    }
+
     return res.status(200).json({
       success: true,
       message: 'User updated',
@@ -200,6 +224,18 @@ exports.deleteUser = async (req, res) => {
         success: false,
         errors: [{ message: 'User not found' }],
       });
+    }
+
+    // incrémente le compteur d'actions et ajoute un timestamp pour l'utilisateur qui effectue la suppression (si présent)
+    try {
+      if (req.user && req.user.id) {
+        await User.findByIdAndUpdate(req.user.id, {
+          $inc: { actionCount: 1 },
+          $push: { actionTimestamps: { $each: [new Date()], $slice: -100 } },
+        });
+      }
+    } catch (e) {
+      console.error('Failed to increment actionCount on delete:', e.message);
     }
 
     return res.status(200).json({
